@@ -108,18 +108,18 @@ header h1{font-size:17px;font-weight:600}
       <div class="tinputs">
         <div class="row">
           <input type="text" id="t1" placeholder="Zeile 1" maxlength="20">
-          <input type="number" id="fs1" min="10" max="500" placeholder="Gr." title="Schriftgröße Zeile 1 (leer = auto)">
-          <label>pt</label>
+          <input type="number" id="fs1" min="10" max="500" placeholder="%" title="Schriftgröße in % (z.B. 25 = groß, 15 = mittel, leer = auto)">
+          <label>%</label>
         </div>
         <div class="row">
           <input type="text" id="t2" placeholder="Zeile 2 (optional)" maxlength="20">
-          <input type="number" id="fs2" min="10" max="500" placeholder="Gr." title="Schriftgröße Zeile 2 (leer = auto)">
-          <label>pt</label>
+          <input type="number" id="fs2" min="10" max="500" placeholder="%" title="Schriftgröße in % (z.B. 25 = groß, 15 = mittel, leer = auto)">
+          <label>%</label>
         </div>
         <div class="row">
           <input type="text" id="t3" placeholder="Zeile 3 (optional)" maxlength="20">
-          <input type="number" id="fs3" min="10" max="500" placeholder="Gr." title="Schriftgröße Zeile 3 (leer = auto)">
-          <label>pt</label>
+          <input type="number" id="fs3" min="10" max="500" placeholder="%" title="Schriftgröße in % (z.B. 25 = groß, 15 = mittel, leer = auto)">
+          <label>%</label>
         </div>
         <div class="fill-row">
           <input type="checkbox" id="fill">
@@ -235,8 +235,8 @@ function drawCube(ctx,size,state,cb){
     // Schriftgröße pro Zeile berechnen
     const fsList=lineData.map(({text,fsManual})=>{
       if(fsManual>0){
-        // Manuelle Größe: skaliert auf Canvas-Größe
-        return fsManual*sc;
+        // Manuelle Größe: Wert als Prozent der nutzbaren Fläche (10 = 10% von use)
+        return use*(fsManual/100);
       }
       if(fill){
         // Füllend: auf volle Breite strecken, durch Höhe begrenzen
@@ -256,7 +256,7 @@ function drawCube(ctx,size,state,cb){
 
     // Gesamthöhe und vertikale Zentrierung
     const totalH=fsList.reduce((s,fs)=>s+fs*1.25,0);
-    const textAreaTop=hasImg?pad+imgH+10*sc:pad+(availH-totalH)/2;
+    const textAreaTop=hasImg?pad+imgH+10*sc:(size-totalH)/2;
     const top=Math.max(pad,textAreaTop);
 
     ctx.fillStyle=inv?'#ffffff':'#000000';
