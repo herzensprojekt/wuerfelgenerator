@@ -226,11 +226,15 @@ function drawCube(ctx,size,state,cb){
       const manualFs=(fontSizes[i]||0)*sc;
       if(manualFs>0) return manualFs;
       if(fill){
-        // Füllend: Breite auf maxW strecken
+        // Füllend: Breite auf maxW strecken, aber Höhe begrenzen
         let fs=maxFs*sc;
         ctx.font=fs+'px Duality,sans-serif';
         const w=ctx.measureText(t).width;
-        return w>0?fs*(maxW/w):fs;
+        const fsW=w>0?fs*(maxW/w):fs;
+        // Max-Höhe pro Zeile: verfügbare Höhe / Anzahl Zeilen
+        const nLines=state.texts.filter(x=>x.trim()).length;
+        const maxFsH=(use-(hasImg?imgH+10*sc:0))/(nLines*1.15);
+        return Math.min(fsW,maxFsH);
       }
       // Auto: auf maxW begrenzen
       let fs=maxFs*sc;
